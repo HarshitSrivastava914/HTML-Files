@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GPay UPI Intent Payment for iOS</title>
+    <script
+      type="text/javascript"
+      src="https://checkout.razorpay.com/v1/razorpay.js"
+    ></script>
+  </head>
+  <body>
+    <h1>GPay UPI Intent Payment for iOS</h1>
+    <button id="check-gpay">Check GPay Availability</button>
+    <div id="status" style="margin-top: 20px"></div>
+    <button id="pay-with-gpay" style="display: none">Pay with GPay</button>
+
+    <script>
+      // Replace with your Razorpay Key ID
+      const razorpayKeyId = "rzp_live_kZq2u3OSeYjsc1"; // Replace with Razorpay test or live Key ID
+      const razorpay = new Razorpay({ key: razorpayKeyId });
+
+      // Elements
+      const checkGPayButton = document.getElementById("check-gpay");
+      const statusDiv = document.getElementById("status");
+      const payButton = document.getElementById("pay-with-gpay");
+
+      // Step 1: Check if GPay is available (for iOS)
+      checkGPayButton.addEventListener("click", () => {
+        statusDiv.textContent = "Checking for GPay availability...";
+
+        razorpay
+          .getSupportedUpiIntentApps()
+          .then((apps) => {
+            if (apps.includes("gpay")) {
+              statusDiv.textContent = "GPay is available on your iOS device!";
+              payButton.style.display = "block"; // Show the Pay button
+            } else {
+              statusDiv.textContent =
+                "GPay is not installed on your iOS device.";
+              payButton.style.display = "none"; // Hide the Pay button
+            }
+          })
+          .catch(() => {
+            statusDiv.textContent =
+              "Could not check app availability. Try again.";
+            payButton.style.display = "none";
+          });
+      });
+
+      // Step 2: Initiate Payment Using GPay
+      payButton.addEventListener("click", () => {
+        const paymentData = {
+          amount: 1000, // Amount in paise (₹1000)
+          method: "upi",
+          contact: "8299846359", // Customer's mobile number
+          email: "cooldudedummy03@gmail.com", // Customer's email address
+          //order_id: "order_PmuyIa2MwyisRj", // Replace with a valid Razorpay order_id
+        };
+
+        // Initiate payment using GPay
+        razorpay.createPayment(paymentData, { app: "gpay" });
+
+        // Success handler
+        razorpay.on("payment.success", function (response) {
+          alert("Payment Successful!");
+          console.log("Payment ID:", response.razorpay_payment_id);
+          console.log("Order ID:", response.razorpay_order_id);
+        });
+
+        // Error handler
+        razorpay.on("payment.error", function (error) {
+          alert("Payment Failed!");
+          console.error("Error Code:", error.code);
+          console.error("Description:", error.description);
+          console.error("Order ID:", error.metadata.order_id);
+        });
+      });
+    </script>
+  </body>
+</html>

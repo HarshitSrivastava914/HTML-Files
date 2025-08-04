@@ -1,0 +1,30 @@
+<button id="rzp-button1">Pay</button>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  var options = {
+    key: "rzp_test_qHO5zWaf7OUAPm",
+    amount: "5076",
+    currency: "INR",
+    name: "Acme Corp",
+    description: "Test Transaction",
+    image: "https://example.com/your_logo",
+    customer_id: "cust_QHGIXa8Krz3D4T",
+    order_id: "order_QzyfCtA5B1fOs3",
+    // prefill: {
+    //   contact: "9988776655",
+    //   email: "gaurav.kumar@example.com",
+    //   name: "Gaurav Kumar",
+    // },
+    //save: 1,
+    handler: function (response) {
+      alert(response.razorpay_payment_id);
+      alert(response.razorpay_order_id);
+      alert(response.razorpay_signature);
+    },
+  };
+  var rzp1 = new Razorpay(options);
+  document.getElementById("rzp-button1").onclick = function (e) {
+    rzp1.open();
+    e.preventDefault();
+  };
+</script>

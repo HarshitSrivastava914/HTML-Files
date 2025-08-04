@@ -1,0 +1,32 @@
+<button id="rzp-button1">Pay</button>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  var options = {
+    key: "rzp_live_BJvtaZZKvSHxkw",
+    amount: 10000,
+    currency: "INR",
+    name: "IIFL",
+    description: "Test Transaction",
+    image: "https://example.com/your_logo.png",
+    //order_id: "order_QzK7QvLnyfTbQq",
+    callback_url:
+      "https://investapi-uat.iiflcapital.com/api/RazorPay/SavingRazorPayResponse?ClientBasicInfoId=9KXhSKBpawIx+WiJK4VtOh5fDJbXbL9+lILVv4VMfHc=",
+    redirect: true,
+    prefill: {
+      name: "MANISHA",
+      email: "shravani.a@optimumfintech.com",
+      contact: "9004584061",
+    },
+    notes: {
+      address: "Razorpay Corporate Office",
+    },
+    theme: {
+      color: "#3399cc",
+    },
+  };
+  var rzp1 = new Razorpay(options);
+  document.getElementById("rzp-button1").onclick = function (e) {
+    rzp1.open();
+    e.preventDefault();
+  };
+</script>

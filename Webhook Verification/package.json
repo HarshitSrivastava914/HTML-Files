@@ -1,0 +1,18 @@
+{
+  "name": "webhook-verification",
+  "version": "1.0.0",
+  "main": "payment_webhook_verification.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "body-parser": "^1.20.3",
+    "crypto": "^1.0.1",
+    "express": "^4.21.2"
+  }
+}

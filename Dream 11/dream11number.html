@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Razorpay UPI Collect with Mobile Number</title>
+    <script src="https://checkout.razorpay.com/v1/razorpay.js"></script>
+  </head>
+  <body>
+    <h2>Pay via UPI Collect</h2>
+    <label>Enter Mobile Number:</label>
+    <input type="tel" id="mobile-number" placeholder="Enter 10-digit number" />
+    <button id="pay-btn">Verify and Pay</button>
+
+    <script>
+      document.getElementById("pay-btn").addEventListener("click", function () {
+        const mobileNumber = document.getElementById("mobile-number").value;
+        if (!/^\d{10}$/.test(mobileNumber)) {
+          alert("Please enter a valid 10-digit mobile number.");
+          return;
+        }
+
+        const options = {
+          key: "rzp_live_kZq2u3OSeYjsc1", // Use your test/live key here
+          amount: 200, // amount in paise (₹2)
+          currency: "INR",
+          email: "harshitsrivastava25012002@gmail.com",
+          contact: mobileNumber,
+          callback_url: "https://www.google.com",
+        };
+
+        const razorpay = new Razorpay({ key: options.key });
+
+        // Step 1: Verify VPA by mobile number
+        razorpay
+          .verifyVpa(mobileNumber)
+          .then((data) => {
+            console.log("VPA Token Response:", data);
+            const vpaToken = data.vpa_token;
+            const maskedVpa = data.masked_vpa;
+
+            const rzp = new Razorpay({
+              key: options.key,
+              callback_url: options.callback_url,
+              redirect: true,
+            });
+
+            rzp.once("ready", function () {
+              const createPaymentOptions = {
+                amount: options.amount,
+                currency: options.currency,
+                email: options.email,
+                contact: options.contact,
+                redirect: true,
+                callback: options.callback_url,
+                method: "upi",
+                upi: {
+                  flow: "collect",
+                  vpa_token: vpaToken, // use token, not raw VPA
+                },
+              };
+
+              console.log(
+                "Creating Razorpay payment with token:",
+                createPaymentOptions
+              );
+
+              rzp.on("payment.success", function (response) {
+                console.log("Payment success", response);
+                alert(
+                  "Payment Successful! Payment ID: " +
+                    response.razorpay_payment_id
+                );
+              });
+
+              rzp.on("payment.error", function (error) {
+                console.error("Payment failed", error);
+                alert("Payment Failed: " + error.error.description);
+              });
+
+              rzp.createPayment(createPaymentOptions);
+            });
+          })
+          .catch((err) => {
+            console.error("No VPA found for this number", err);
+            alert("No UPI ID linked to this number. Please try another.");
+          });
+      });
+    </script>
+  </body>
+</html>

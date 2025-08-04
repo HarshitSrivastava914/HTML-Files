@@ -1,0 +1,56 @@
+<button id="rzp-button1">Pay</button>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  var options = {
+    key: "rzp_test_LwRcSmaytksQWk",
+    //order_id: "order_QPyEjRwgb4iFeA",
+    amount: 10000,
+    currency: "INR",
+    image:
+      "https://stage-cdn.pchf.in/pchfweb/assets/images/favicons/favicon.png",
+    callback_url: "https://eneqd3r9zrjok.x.pipedream.net/",
+    config: {
+      display: {
+        blocks: {
+          banks: {
+            name: "All payment methods",
+            instruments: [
+              {
+                method: "netbanking",
+              },
+            ],
+          },
+        },
+        sequence: ["block.banks"],
+        preferences: {
+          show_default_blocks: false,
+        },
+      },
+    },
+
+    handler: function (response) {
+      alert("Payment successful!");
+      console.log("Payment ID:", response.razorpay_payment_id);
+      console.log("Order ID:", response.razorpay_order_id);
+      console.log("Signature:", response.razorpay_signature);
+    },
+  };
+
+  var rzp1 = new Razorpay(options);
+
+  rzp1.on("payment.failed", function (response) {
+    alert("Payment Failed");
+    console.error("Error Code:", response.error.code);
+    console.error("Description:", response.error.description);
+    console.error("Source:", response.error.source);
+    console.error("Step:", response.error.step);
+    console.error("Reason:", response.error.reason);
+    console.error("Order ID:", response.error.metadata.order_id);
+    console.error("Payment ID:", response.error.metadata.payment_id);
+  });
+
+  document.getElementById("rzp-button1").onclick = function (e) {
+    rzp1.open();
+    e.preventDefault();
+  };
+</script>

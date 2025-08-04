@@ -1,0 +1,528 @@
+<!-- <!DOCTYPE html>
+<html>
+  <head>
+    <title>Razorpay Dynamic Checkout</title>
+    <style>
+      button {
+        margin: 8px;
+        padding: 10px 20px;
+        font-size: 14px;
+        border-radius: 5px;
+        border: none;
+        background-color: #008cff;
+        color: white;
+        cursor: pointer;
+      }
+      .sub-buttons {
+        margin-left: 20px;
+        margin-top: 10px;
+        display: none;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Razorpay Supported Payment Methods</h2>
+    <div id="buttons"></div>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+      const key = "rzp_live_Z0UOREZiFYcSqz";
+
+      const formatLabel = (text) =>
+        text.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+
+      function getCustomConfig(method, type) {
+        let instrument = { method };
+
+        if (method === "wallet") instrument.wallets = [type];
+        else if (method === "netbanking") instrument.banks = [type];
+        else if (method === "card") instrument.issuers = [type];
+        else if (method === "upi")
+          instrument = { method: "upi", flow: "intent", app: type };
+        else if (method === "emi") instrument.issuers = [type];
+        else if (method === "paylater") instrument.providers = [type];
+        else if (method === "cardless_emi") instrument.providers = [type];
+
+        return {
+          display: {
+            blocks: {
+              single: {
+                name: `Pay via ${formatLabel(type)}`,
+                instruments: [instrument],
+              },
+            },
+            sequence: ["block.single"],
+            preferences: { show_default_blocks: false },
+          },
+        };
+      }
+
+      function launchCheckout(config) {
+        const options = {
+          key,
+          amount: "1000",
+          currency: "INR",
+          name: "Razorpay Demo",
+          description: "Dynamic Payment Method",
+          prefill: {
+            email: "test@example.com",
+            contact: "+919000000000",
+          },
+          config,
+          handler: function (response) {
+            alert("Payment ID: " + response.razorpay_payment_id);
+          },
+          modal: {
+            ondismiss: function () {
+              console.log("Checkout closed");
+            },
+          },
+        };
+        const rzp = new Razorpay(options);
+        rzp.open();
+      }
+
+      function createMethodButton(label, subButtonContainer) {
+        const btn = document.createElement("button");
+        btn.innerText = label;
+        btn.onclick = () => {
+          subButtonContainer.style.display =
+            subButtonContainer.style.display === "none" ? "block" : "none";
+        };
+        document.getElementById("buttons").appendChild(btn);
+        document.getElementById("buttons").appendChild(subButtonContainer);
+      }
+
+      function createSubButton(label, config, container) {
+        const btn = document.createElement("button");
+        btn.innerText = label;
+        btn.onclick = () => launchCheckout(config);
+        container.appendChild(btn);
+      }
+
+      fetch("http://localhost:3000/methods")
+        .then((res) => res.json())
+        .then((methods) => {
+          // Wallets
+          if (methods.wallet) {
+            const walletContainer = document.createElement("div");
+            walletContainer.className = "sub-buttons";
+            Object.keys(methods.wallet).forEach((wallet) => {
+              createSubButton(
+                formatLabel(wallet),
+                getCustomConfig("wallet", wallet),
+                walletContainer
+              );
+            });
+            createMethodButton("Wallets", walletContainer);
+          }
+
+          // UPI
+          if (methods.upi || methods.upi_intent) {
+            const upiContainer = document.createElement("div");
+            upiContainer.className = "sub-buttons";
+
+            if (methods.upi) {
+              createSubButton(
+                "UPI Collect",
+                {
+                  display: { blocks: {}, sequence: [], preferences: {} },
+                  method: "upi",
+                },
+                upiContainer
+              );
+            }
+
+            if (methods.upi_intent) {
+              const apps = ["gpay", "phonepe", "paytm"]; // Common intent apps (optional)
+              apps.forEach((app) => {
+                createSubButton(
+                  `UPI Intent: ${formatLabel(app)}`,
+                  getCustomConfig("upi", app),
+                  upiContainer
+                );
+              });
+            }
+
+            createMethodButton("UPI", upiContainer);
+          }
+
+          // Netbanking
+          if (methods.netbanking) {
+            const bankContainer = document.createElement("div");
+            bankContainer.className = "sub-buttons";
+            Object.entries(methods.netbanking).forEach(([code, name]) => {
+              createSubButton(
+                name,
+                getCustomConfig("netbanking", code),
+                bankContainer
+              );
+            });
+            createMethodButton("Netbanking", bankContainer);
+          }
+
+          // Cards (Networks)
+          if (methods.card_networks) {
+            const cardContainer = document.createElement("div");
+            cardContainer.className = "sub-buttons";
+            Object.entries(methods.card_networks).forEach(
+              ([network, enabled]) => {
+                if (enabled === 1) {
+                  createSubButton(
+                    formatLabel(network),
+                    getCustomConfig("card", network),
+                    cardContainer
+                  );
+                }
+              }
+            );
+            createMethodButton("Cards", cardContainer);
+          }
+
+          // EMI
+          if (methods.emi?.issuer) {
+            const emiContainer = document.createElement("div");
+            emiContainer.className = "sub-buttons";
+            Object.entries(methods.emi.issuer).forEach(([code, name]) => {
+              createSubButton(name, getCustomConfig("emi", code), emiContainer);
+            });
+            createMethodButton("EMI", emiContainer);
+          }
+
+          // Paylater
+          if (methods.paylater?.provider) {
+            const paylaterContainer = document.createElement("div");
+            paylaterContainer.className = "sub-buttons";
+            methods.paylater.provider.forEach((provider) => {
+              createSubButton(
+                formatLabel(provider),
+                getCustomConfig("paylater", provider),
+                paylaterContainer
+              );
+            });
+            createMethodButton("Pay Later", paylaterContainer);
+          }
+
+          // Cardless EMI
+          if (methods.cardless_emi?.provider) {
+            const cardlessContainer = document.createElement("div");
+            cardlessContainer.className = "sub-buttons";
+            methods.cardless_emi.provider.forEach((provider) => {
+              createSubButton(
+                formatLabel(provider),
+                getCustomConfig("cardless_emi", provider),
+                cardlessContainer
+              );
+            });
+            createMethodButton("Cardless EMI", cardlessContainer);
+          }
+        })
+        .catch((err) => {
+          console.error("Failed to load supported methods", err);
+        });
+    </script>
+  </body>
+</html> -->
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Razorpay Multi-Method Config</title>
+    <style>
+      button,
+      input[type="checkbox"] {
+        margin: 8px;
+        padding: 10px 20px;
+        font-size: 14px;
+        border-radius: 5px;
+        border: none;
+        background-color: #008cff;
+        color: white;
+        cursor: pointer;
+      }
+      .method-section {
+        margin-bottom: 16px;
+      }
+      .sub-buttons {
+        margin-left: 20px;
+        display: none;
+      }
+      .checkbox-label {
+        display: block;
+        margin: 5px 0;
+        color: black;
+        font-size: 14px;
+      }
+      .bin-input {
+        margin-top: 10px;
+        padding: 8px;
+        width: 300px;
+        font-size: 14px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Select Payment Methods</h2>
+    <div id="buttons"></div>
+    <button onclick="payNow()">Pay Now</button>
+    <h3>Checkout Config</h3>
+    <pre
+      id="configOutput"
+      style="background: #f4f4f4; padding: 16px; border-radius: 8px"
+    ></pre>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+      const key = "rzp_live_Z0UOREZiFYcSqz";
+
+      const formatLabel = (text) =>
+        text.replace(/_/g, " ").replace(/\b\w/g, (l) => l.toUpperCase());
+
+      function toggleSubMethods(container) {
+        container.style.display =
+          container.style.display === "none" ? "block" : "none";
+      }
+
+      function addCheckbox(label, method, type, container) {
+        const id = `${method}_${type}`;
+        const wrapper = document.createElement("label");
+        wrapper.className = "checkbox-label";
+        wrapper.innerHTML = `
+          <input type="checkbox" id="${id}" data-method="${method}" data-type="${type}" />
+          ${label}
+        `;
+        container.appendChild(wrapper);
+      }
+
+      function createMethodBlock(title, subMethodFn, includeBin = false) {
+        const section = document.createElement("div");
+        section.className = "method-section";
+
+        const button = document.createElement("button");
+        button.innerText = title;
+        const subContainer = document.createElement("div");
+        subContainer.className = "sub-buttons";
+
+        button.onclick = () => toggleSubMethods(subContainer);
+        section.appendChild(button);
+        section.appendChild(subContainer);
+
+        subMethodFn(subContainer);
+
+        if (includeBin) {
+          const binInput = document.createElement("input");
+          binInput.placeholder = `Optional BINs for ${title} (comma-separated)`;
+          binInput.className = "bin-input";
+          binInput.setAttribute("data-bin-for", title.toLowerCase());
+          subContainer.appendChild(binInput);
+        }
+
+        document.getElementById("buttons").appendChild(section);
+      }
+
+      function payNow() {
+        const checkboxes = document.querySelectorAll(
+          'input[type="checkbox"]:checked'
+        );
+        if (checkboxes.length === 0)
+          return alert("Please select at least one sub-method.");
+
+        const methodMap = {};
+
+        // Fetch BINs from Netbanking and Cards
+        const netbankingBins = document
+          .querySelector('input[data-bin-for="netbanking"]')
+          ?.value.trim();
+        const cardBins = document
+          .querySelector('input[data-bin-for="cards"]')
+          ?.value.trim();
+        const netbankingBinList = netbankingBins
+          ? netbankingBins.split(",").map((b) => b.trim())
+          : [];
+        const cardBinList = cardBins
+          ? cardBins.split(",").map((b) => b.trim())
+          : [];
+
+        checkboxes.forEach((cb) => {
+          const method = cb.getAttribute("data-method");
+          const type = cb.getAttribute("data-type");
+
+          if (!methodMap[method]) methodMap[method] = { method };
+
+          if (method === "wallet") {
+            if (!methodMap[method].wallets) methodMap[method].wallets = [];
+            methodMap[method].wallets.push(type);
+          } else if (method === "netbanking") {
+            if (!methodMap[method].banks) methodMap[method].banks = [];
+            methodMap[method].banks.push(type);
+            if (netbankingBinList.length)
+              methodMap[method].iins = netbankingBinList;
+          } else if (method === "card") {
+            if (!methodMap[method].issuers) methodMap[method].issuers = [];
+            methodMap[method].issuers.push(type);
+            if (cardBinList.length) methodMap[method].iins = cardBinList;
+          } else if (method === "emi") {
+            if (!methodMap[method].issuers) methodMap[method].issuers = [];
+            methodMap[method].issuers.push(type);
+          } else if (method === "paylater") {
+            if (!methodMap[method].providers) methodMap[method].providers = [];
+            methodMap[method].providers.push(type);
+          } else if (method === "cardless_emi") {
+            if (!methodMap[method].providers) methodMap[method].providers = [];
+            methodMap[method].providers.push(type);
+          } else if (method === "upi") {
+            if (type === "collect") {
+              methodMap[method] = { method: "upi" };
+            } else {
+              if (!methodMap[method].apps) methodMap[method].apps = [];
+              methodMap[method].flow = "intent";
+              methodMap[method].apps.push(type);
+            }
+          }
+        });
+
+        const instruments = Object.values(methodMap);
+
+        const config = {
+          display: {
+            blocks: {
+              custom: {
+                name: "Selected Payment Methods",
+                instruments,
+              },
+            },
+            sequence: ["block.custom"],
+            preferences: {
+              show_default_blocks: false,
+            },
+          },
+        };
+
+        document.getElementById("configOutput").innerText = JSON.stringify(
+          config,
+          null,
+          2
+        );
+
+        const options = {
+          key,
+          amount: "1000000",
+          currency: "INR",
+          name: "Razorpay Demo",
+          description: "Multiple Payment Options",
+          prefill: {
+            email: "test@example.com",
+            contact: "+919000000000",
+          },
+          config,
+          handler: function (response) {
+            alert("Payment ID: " + response.razorpay_payment_id);
+          },
+        };
+
+        new Razorpay(options).open();
+      }
+
+      fetch("http://localhost:3000/methods")
+        .then((res) => res.json())
+        .then((methods) => {
+          if (methods.wallet) {
+            createMethodBlock("Wallets", (container) => {
+              Object.keys(methods.wallet).forEach((w) =>
+                addCheckbox(formatLabel(w), "wallet", w, container)
+              );
+            });
+          }
+
+          if (methods.upi || methods.upi_intent) {
+            createMethodBlock("UPI", (container) => {
+              if (methods.upi)
+                addCheckbox("UPI Collect", "upi", "collect", container);
+              if (methods.upi_intent) {
+                ["gpay", "phonepe", "paytm"].forEach((app) =>
+                  addCheckbox(`UPI: ${formatLabel(app)}`, "upi", app, container)
+                );
+              }
+            });
+          }
+
+          if (methods.netbanking) {
+            createMethodBlock(
+              "Netbanking",
+              (container) => {
+                Object.entries(methods.netbanking).forEach(([code, name]) =>
+                  addCheckbox(name, "netbanking", code, container)
+                );
+              },
+              true
+            ); // include BIN input
+          }
+
+          if (methods.card_networks) {
+            createMethodBlock(
+              "Cards",
+              (container) => {
+                Object.entries(methods.card_networks).forEach(
+                  ([network, enabled]) => {
+                    if (enabled === 1)
+                      addCheckbox(
+                        formatLabel(network),
+                        "card",
+                        network,
+                        container
+                      );
+                  }
+                );
+              },
+              true
+            ); // include BIN input
+          }
+
+          if (methods.emi_options) {
+            createMethodBlock("EMI", (container) => {
+              Object.keys(methods.emi_options).forEach((issuer) => {
+                addCheckbox(formatLabel(issuer), "emi", issuer, container);
+              });
+            });
+          }
+
+          if (methods.paylater && typeof methods.paylater === "object") {
+            createMethodBlock("Pay Later", (container) => {
+              Object.entries(methods.paylater).forEach(
+                ([provider, isEnabled]) => {
+                  if (isEnabled) {
+                    addCheckbox(
+                      formatLabel(provider),
+                      "paylater",
+                      provider,
+                      container
+                    );
+                  }
+                }
+              );
+            });
+          }
+
+          if (
+            methods.cardless_emi &&
+            typeof methods.cardless_emi === "object"
+          ) {
+            createMethodBlock("Cardless EMI", (container) => {
+              Object.entries(methods.cardless_emi).forEach(
+                ([provider, isEnabled]) => {
+                  if (isEnabled) {
+                    addCheckbox(
+                      formatLabel(provider),
+                      "cardless_emi",
+                      provider,
+                      container
+                    );
+                  }
+                }
+              );
+            });
+          }
+        });
+    </script>
+  </body>
+</html>

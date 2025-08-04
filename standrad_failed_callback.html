@@ -1,0 +1,25 @@
+<button id="rzp-button1">Pay</button>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  var options = {
+    key: "rzp_test_qHO5zWaf7OUAPm", // Enter the Key ID generated from the Dashboard
+    amount: "500", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+    currency: "INR",
+    callback_url: "https://www.google.com",
+    //retry: "false",
+    modal: {
+      ondismiss: function () {
+        alert("Payment modal closed. Redirecting you to Google.");
+        console.log("Checkout form was dismissed by the user.");
+        window.location.href = "https://www.wikipedia.com";
+      },
+    },
+  };
+
+  var rzp1 = new Razorpay(options);
+
+  document.getElementById("rzp-button1").onclick = function (e) {
+    rzp1.open();
+    e.preventDefault();
+  };
+</script>

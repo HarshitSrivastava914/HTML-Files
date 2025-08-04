@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script
+      type="text/javascript"
+      src="https://checkout.razorpay.com/v1/razorpay.js"
+    ></script>
+  </head>
+  <body>
+    <button id="btn">Pay</button>
+    <script>
+      var razorpay = new Razorpay({
+        key: "rzp_live_OsuTXemy1e3KOl",
+        image: "https://i..com/n5tjHFD.jpg",
+        redirect: true,
+        callback_url:
+          "https://preprod-payment.stoxkart.com/api/v1/razorpay/paymentCallback",
+      });
+      razorpay.once("ready", function (response) {
+        console.log(response.methods);
+      });
+      var btn = document.querySelector("#btn");
+      btn.addEventListener("click", function () {
+        razorpay.createPayment({
+          // amount: 1000,
+          // currency: "INR",
+          // email: "ismail.zabi@example.com",
+          // contact: "4204204200",
+          // order_id: "order_QuTCJ3um6JAr5U",
+          // //customer_id:"cust_OBYTR6jisi8hxj",
+          // //token:"token_KKUZHSCWUmtZSX",
+          // method: "card",
+          // //provider:"hdfc"
+          // //emi_duration: 9,
+          // //'card[cvv]':'697',
+          // //token:'token_MuJ6UJdWqfC0tX'
+          // "card[number]": "5267318187975449",
+          // "card[cvv]": "697",
+          // "card[expiry_month]": "08",
+          // "card[expiry_year]": "26",
+          // notes: {
+          //   front_end: "value3",
+          // },
+          //save:1,
+          //recurring:"1",
+          //     method: 'upi',
+          //     upi:
+          //     {
+          //         qr: true,
+          //         timeout: 100
+          //     }
+          amount: "10000",
+          //key: "rzp_live_OsuTXemy1e3KOl",
+          currency: "INR",
+          email: "SAGAR@SMCINDIAONLINE.COM",
+          contact: "9713020488",
+          order_id: "order_QyS6sLKW5zeO00",
+          method: "netbanking",
+          bank: "HDFC",
+        });
+        razorpay.on("payment.success", function (resp) {
+          alert(resp.razorpay_payment_id),
+            alert(resp.razorpay_order_id),
+            alert(resp.razorpay_signature);
+        });
+        razorpay.on("payment.error", function (resp) {
+          alert(resp.error.description);
+        }); // will pass error object to error handler
+      });
+    </script>
+  </body>
+</html>

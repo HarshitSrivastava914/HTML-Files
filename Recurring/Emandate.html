@@ -1,0 +1,29 @@
+<button id="rzp-button1">Pay</button>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  var options = {
+    key: "rzp_test_9JZK9GmeExFtz1", //Hema's Key
+    order_id: "order_QgZvkXpnB3mq98",
+    customer_id: "cust_QgZvTHBhak08Qa",
+    recurring: "1",
+    callback_url: "https://www.google.com/",
+    notes: {
+      "note_key 1": "Beam me up Scotty",
+      "note_key 2": "Tea. Earl Gray. Hot.",
+    },
+    theme: {
+      color: "#F37254",
+    },
+    prefill: {
+      //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
+      name: "Gaurav Kumar", //your customer's name
+      email: "gaurav.kumar@example.com",
+      contact: "9000090000", //Provide the customer's phone number for better conversion rates
+    },
+  };
+  var rzp1 = new Razorpay(options);
+  document.getElementById("rzp-button1").onclick = function (e) {
+    rzp1.open();
+    e.preventDefault();
+  };
+</script>

@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Razorpay Standard Checkout</title>
+  </head>
+  <body>
+    <h1>Pay with Razorpay</h1>
+    <button id="rzp-button1">Pay ₹500</button>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+      async function getOrderId() {
+        const response = await fetch("/create-order", {
+          method: "POST",
+        });
+        const order = await response.json();
+        return order.id;
+      }
+
+      document.getElementById("rzp-button1").onclick = async function (e) {
+        const order_id = await getOrderId();
+
+        const options = {
+          key: "rzp_test_qHO5zWaf7OUAPm", // Replace with your key_id
+          amount: "50000",
+          currency: "INR",
+          //   name: "Acme Corp",
+          //   description: "Test Transaction",
+          order_id: order_id,
+          callback_url: "http://localhost:3000/callback",
+          redirect: true,
+          prefill: {
+            name: "John Doe",
+            email: "john@example.com",
+            contact: "9999999999",
+          },
+          retry: "false",
+          //   theme: {
+          //     color: "#3399cc",
+          //   },
+        };
+
+        const rzp1 = new Razorpay(options);
+        rzp1.open();
+        e.preventDefault();
+      };
+    </script>
+  </body>
+</html>

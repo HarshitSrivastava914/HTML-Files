@@ -1,0 +1,47 @@
+<script src="https://checkout.razorpay.com/v1/razorpay.js"></script>
+<button
+  id="rzp-button1"
+  style="
+    background-color: #3399cc;
+    color: white;
+    font-size: 16px;
+    font-family: sans-serif;
+  "
+>
+  Pay
+</button>
+<script>
+  var razorpay = new Razorpay({
+    key: "rzp_test_qHO5zWaf7OUAPm",
+    image: "https://i.imgur.com/n5tjHFD.jpg",
+    redirect: true,
+  });
+  var data = {
+    amount: 6666,
+    currency: "INR",
+    order_id: "order_QHGHBJWLKnG3Zc",
+    email: "test@gmail.com",
+    contact: 9111111111,
+    notes: {
+      address: "Ground Floor, SJR Cyber, Laskar Hosur Road, Bengaluru",
+    },
+    customer_id: "cust_QHGIXa8Krz3D4T",
+    save: 1,
+    method: "card",
+    "card[name]": "Gaurav Kumar",
+    "card[number]": "4111111111111111",
+    "card[cvv]": "566",
+    "card[expiry_month]": "10",
+    "card[expiry_year]": "30",
+  };
+
+  document.getElementById("rzp-button1").onclick = function () {
+    razorpay.createPayment(data);
+    razorpay.on("payment.success", function (resp) {
+      alert(resp.razorpay_payment_id);
+    });
+    razorpay.on("payment.error", function (resp) {
+      alert(resp.error.description);
+    });
+  };
+</script>

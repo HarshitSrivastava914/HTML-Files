@@ -1,0 +1,46 @@
+<button id="rzp-button1">Pay</button>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  var options = {
+    key: "rzp_test_pt4H2WyMz8jxK5",
+    amount: 100,
+    currency: "INR",
+    name: "Founding Fuel",
+    description: "Voluntary Contribution",
+    image: "https://d25ecq9zgd9hts.cloudfront.net/img/ffnavlogo.png",
+    //order_id: "",
+    callback_url:
+      "https://dev.foundingfuel.com/voluntary-contribution-thank-you",
+    // notes: {
+    //   payment: "Voluntary Contribution",
+    //   name: contributorName,
+    //   email: contributorEmail,
+    //   phone: contributorPhone,
+    //   country: contributorCountry,
+    //   state: contributorState,
+    //   gst: contributorGST,
+    //   pan: contributorPAN,
+    // },
+    theme: {
+      color: "#335B86",
+    },
+    method: {
+      upi: true,
+      card: true,
+      netbanking: true,
+      wallet: true,
+      emi: false,
+      paylater: false,
+    },
+    // prefill: {
+    //   name: contributorName,
+    //   email: contributorEmail,
+    //   phone: contributorPhone,
+    // },
+  };
+  var rzp1 = new Razorpay(options);
+  document.getElementById("rzp-button1").onclick = function (e) {
+    rzp1.open();
+    e.preventDefault();
+  };
+</script>

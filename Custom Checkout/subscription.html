@@ -1,0 +1,58 @@
+<script
+  type="text/javascript"
+  src="https://checkout.razorpay.com/v1/razorpay.js"
+></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<body>
+  <button
+    id="btn"
+    style="
+      background-color: #3399cc;
+      color: white;
+      font-size: 16px;
+      font-family: sans-serif;
+    "
+  >
+    Pay
+  </button>
+  <script>
+    const btn = document.querySelector("#btn");
+    var razorpay = new Razorpay({
+      key: "rzp_live_79AZps9rxKaIRS",
+      image: "https://i.imgur.com/n5tjHFD.jpg",
+    });
+    razorpay.once("ready", function (response) {
+      console.log(response.methods);
+    });
+    var data = {
+      callback_url: "www.example-callback-url.com",
+      amount: 69900, // in currency subunits. Here 1000 = 1000 paise, which equals to ₹10
+      currency: "INR", // Default is INR. We support more than 90 currencies.
+      email: "gaurav.kumar@example.com",
+      contact: "9562556136",
+      notes: {
+        address: "Ground Floor, SJR Cyber, Laskar Hosur Road, Bengaluru",
+      },
+      subscription_id: "sub_Qb8lRCMgKiAa8z",
+      recurring: 1,
+      // save: 1,
+      // consent_to_save_card: 1,
+      // method: "card",
+      // "card[name]": "Gaurav Kumar",
+      // "card[number]": "5104015555555558",
+      // "card[cvv]": "123",
+      // "card[expiry_month]": "10",
+      // "card[expiry_year]": "27",
+      offer_id: "offer_QajGkDrYGlJZTh",
+      method: "upi",
+      upi: {
+        vpa: "9562556136@ybl",
+        flow: "collect",
+      },
+    };
+    btn.addEventListener("click", function () {
+      // has to be placed within user initiated context, such as click, in order for popup to open.
+      razorpay.createPayment(data);
+    });
+  </script>
+</body>

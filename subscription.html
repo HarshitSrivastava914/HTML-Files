@@ -1,0 +1,77 @@
+<button id="rzp-button1">Pay</button>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  var options = {
+    key: "rzp_test_sg_jBej8tGLL9nmJf",
+    subscription_id: "sub_Qth4LZ3FkAq1d2",
+    currency: "INR",
+    callback_url: "https://eneqd3r9zrjok.x.pipedream.net/",
+    // prefill: {
+    //   name: "Gaurav Kumar",
+    //   email: "gaurav.kumar@example.com",
+    //   contact: "+919876543210",
+    // },
+    notes: {
+      note_key_1: "Tea. Earl Grey. Hot",
+      note_key_2: "Make it so.",
+    },
+    // theme: {
+    //color: "#3399cc",
+    //hide_topbar: true,
+    //},
+    // config: {
+    //   display: {
+    //     blocks: {
+    //       block1: {
+    //         name: "Preferred Methods",
+    //         instruments: [
+    //           {
+    //             method: "upi",
+    //             apps: ["google_pay"],
+    //             flows: ["intent"],
+    //           },
+    //           {
+    //             method: "upi",
+    //             apps: ["phonepe"],
+    //             flows: ["intent"],
+    //           },
+    //           {
+    //             method: "upi",
+    //             apps: ["paytm"],
+    //             flows: ["intent"],
+    //           },
+    //           {
+    //             method: "upi",
+    //             apps: ["cred"],
+    //             flows: ["intent"],
+    //           },
+    //           {
+    //             method: "card",
+    //             types: ["debit"],
+    //           },
+    //         ],
+    //       },
+    //       block2: {
+    //         name: "Other Methods",
+    //         instruments: [
+    //           {
+    //             method: "upi",
+    //             apps: ["paytm"],
+    //             flow: ["collect", "qr", "intent"],
+    //           },
+    //         ],
+    //       },
+    //     },
+    //     sequence: ["block.block1", "block.block2"],
+    //     preferences: {
+    //       show_default_blocks: false,
+    //     },
+    //   },
+    // },
+  };
+  var rzp1 = new Razorpay(options);
+  document.getElementById("rzp-button1").onclick = function (e) {
+    rzp1.open();
+    e.preventDefault();
+  };
+</script>

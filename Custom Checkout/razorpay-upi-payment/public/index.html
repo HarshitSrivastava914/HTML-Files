@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Razorpay UPI Intent Payment</title>
+    <script
+      type="text/javascript"
+      src="https://checkout.razorpay.com/v1/razorpay.js"
+    ></script>
+    <style>
+      #upi-apps-container {
+        margin-top: 20px;
+        display: flex;
+      }
+      .upi-app {
+        display: flex;
+        align-items: center;
+        margin: 10px 0;
+        cursor: pointer;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        transition: background-color 0.3s ease;
+      }
+      .upi-app:hover {
+        background-color: #f0f0f0;
+      }
+      .upi-app img {
+        width: 32px;
+        height: 32px;
+        margin-right: 10px;
+        border-radius: 4px;
+      }
+      .upi-app span {
+        font-size: 16px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Razorpay Custom Checkout UPI Intent Payment Integration</h1>
+    <button id="pay-btn">Fetch Available UPI Apps</button>
+    <div id="upi-apps-container"></div>
+    <script src="razorpayPayment.js"></script>
+  </body>
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Razorpay UPI Collect Checkout</title>
+    <script src="https://checkout.razorpay.com/v1/razorpay.js"></script>
+  </head>
+  <body>
+    <button id="pay-btn">Pay via UPI Collect</button>
+
+    <script>
+      document.getElementById("pay-btn").addEventListener("click", function () {
+        const options = {
+          key: "rzp_live_kZq2u3OSeYjsc1", // Use your test or live key here
+          amount: 200, // amount in paise (₹1)
+          currency: "INR",
+          email: "harshitsrivastava25012002@gmail.com",
+          contact: "8299846359",
+          // Provide a valid order_id from backend in real usage
+          //order_id: "order_DummyOrderId123",
+          callback_url: "https://www.google.com",
+          upi: {
+            vpa: "harshitsrivastava25012002@oksbi", // Replace with actual user VPA
+          },
+        };
+
+        const rzp = new Razorpay({
+          key: options.key,
+          callback_url: options.callback_url,
+          redirect: true,
+        });
+
+        rzp.once("ready", function () {
+          const createPaymentOptions = {
+            amount: options.amount,
+            currency: options.currency,
+            email: options.email,
+            contact: options.contact,
+            order_id: options.order_id,
+            redirect: true,
+            callback: options.callback_url,
+            method: "upi",
+            upi: {
+              flow: "collect",
+              vpa: options.upi.vpa,
+            },
+          };
+
+          console.log("Razorpay ready", createPaymentOptions);
+
+          rzp.on("payment.success", function (response) {
+            console.log("Payment success", response);
+            alert(
+              "Payment Successful! Payment ID: " + response.razorpay_payment_id
+            );
+          });
+
+          rzp.on("payment.error", function (error) {
+            console.error("Payment failed", error);
+            alert("Payment Failed: " + error.error.description);
+          });
+
+          rzp.createPayment(createPaymentOptions);
+        });
+      });
+    </script>
+  </body>
+</html>
