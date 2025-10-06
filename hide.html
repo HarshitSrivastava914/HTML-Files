@@ -5,12 +5,9 @@
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
     var options = {
-      key: "rzp_test_1sjnKZ3EsBduvp", // Enter the Key ID generated from the Dashboard
+      key: "rzp_test_qHO5zWaf7OUAPm", // Enter the Key ID generated from the Dashboard
       amount: "1527300",
-      order_id: "order_Q8Z5hdluQWT4yh",
       currency: "INR",
-      description: "Acme Corp",
-      image: "example.com/image/rzp.jpg",
       prefill: {
         email: "gaurav.kumar@example.com",
         contact: +919900000000,
@@ -43,12 +40,12 @@
       config: {
         display: {
           hide: [
-            { method: "wallet" },
-            { method: "upi" },
-            { method: "card" },
-            { method: "net" },
-            //{"method" : "emi"},
-            { method: "paylater" },
+            { method: "netbanking" },
+            // { method: "upi" },
+            // { method: "card" },
+            // { method: "net" },
+            // { method: "emi" },
+            // { method: "paylater" },
           ],
         },
       },

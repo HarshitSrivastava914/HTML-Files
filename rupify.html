@@ -1,0 +1,40 @@
+<html>
+  <head>
+    <title>Checkout Page</title>
+  </head>
+  <body>
+    <button id="rzp-button1">Pay</button>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+      var options = {
+        key: "rzp_live_hjGbBfIkXZlgxA",
+        order_id: "order_R2Qmb6PMfiY2Bw",
+        customer_id: "cust_QcdRlk30TZWaut",
+        recurring: "1",
+        name: "Western Capital",
+        description: "ENACH Setup",
+        readonly: {
+          contact: true,
+        },
+        hidden: {
+          contact: true,
+          email: true,
+        },
+        handler: function (response) {
+          console.log(response);
+          alert(response.razorpay_payment_id);
+          alert(response.razorpay_order_id);
+          alert(response.razorpay_signature);
+        },
+        theme: {
+          color: "#000000",
+        },
+      };
+      var rzp1 = new Razorpay(options);
+      document.getElementById("rzp-button1").onclick = function (e) {
+        rzp1.open();
+        e.preventDefault();
+      };
+    </script>
+  </body>
+</html>

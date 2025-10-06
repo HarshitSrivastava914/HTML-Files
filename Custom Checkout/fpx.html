@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <script
+      type="text/javascript"
+      src="https://checkout.razorpay.com/v1/razorpay.js"
+    ></script>
+  </head>
+  <body>
+    <button id="btn">Pay</button>
+    <script>
+      var razorpay = new Razorpay({
+        key: "rzp_live_fQOafVJoJqscJ6",
+        image: "https://i..com/n5tjHFD.jpg",
+        // redirect: true,
+        // callback_url:
+        //   "https://preprod-payment.stoxkart.com/api/v1/razorpay/paymentCallback",
+      });
+      razorpay.once("ready", function (response) {
+        console.log(response.methods);
+      });
+      var btn = document.querySelector("#btn");
+      btn.addEventListener("click", function () {
+        razorpay.createPayment({
+          amount: 1000,
+          currency: "MYR",
+          email: "ismail.zabi@example.com",
+          contact: "4204204200",
+          method: "fpx",
+          bank: "HSBC",
+        });
+        razorpay.on("payment.success", function (resp) {
+          alert(resp.razorpay_payment_id),
+            alert(resp.razorpay_order_id),
+            alert(resp.razorpay_signature);
+        });
+        razorpay.on("payment.error", function (resp) {
+          alert(resp.error.description);
+        }); // will pass error object to error handler
+      });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html style="height: 100%; width: 100%">
+  <head>
+    <title>Processing, Please Wait...</title>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#3741C8" />
+    <meta
+      http-equiv="refresh"
+      content="0;url=https://api-sg.razorpay.com/pg_router/v1/payments/pay_R7V17mrkrBqDNB/dcc_info"
+    />
+    <style>
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        background: #f5f5f5;
+        overflow: hidden;
+        text-align: center;
+        height: 100%;
+        white-space: nowrap;
+        margin: 0;
+        padding: 0;
+        font-family: -apple-system, BlinkMacSystemFont, ubuntu, verdana,
+          helvetica, sans-serif;
+      }
+
+      #bg {
+        position: absolute;
+        bottom: 50%;
+        width: 100%;
+        height: 50%;
+        background: #3741c8;
+        margin-bottom: 90px;
+      }
+
+      #cntnt {
+        position: relative;
+        width: 100%;
+        vertical-align: middle;
+        display: inline-block;
+        margin: auto;
+        max-width: 420px;
+        min-width: 280px;
+        height: 95%;
+        max-height: 360px;
+        background: #fff;
+        z-index: 9999;
+        box-shadow: 0 0 20px 0 rgba(0, 0, 0, 0.16);
+        border-radius: 4px;
+        overflow: hidden;
+        padding: 24px;
+        box-sizing: border-box;
+        text-align: left;
+      }
+
+      #ftr {
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 80px;
+        background: #f5f5f5;
+        text-align: center;
+        color: #212121;
+        font-size: 14px;
+        letter-spacing: -0.3px;
+      }
+
+      #ftr_new {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0 24px;
+        position: absolute;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        height: 80px;
+        background: #f5f5f5;
+        text-align: center;
+        color: #212121;
+        font-size: 14px;
+        letter-spacing: -0.3px;
+      }
+
+      #ldr {
+        width: 100%;
+        height: 3px;
+        position: relative;
+        margin-top: 16px;
+        border-radius: 3px;
+        overflow: hidden;
+      }
+
+      #ldr::before,
+      #ldr::after {
+        content: "";
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        width: 100%;
+      }
+
+      #ldr::before {
+        top: 1px;
+        border-top: 1px solid #bcbcbc;
+      }
+
+      #ldr::after {
+        background: #3741c8;
+        width: 0%;
+        transition: 20s cubic-bezier(0, 0.1, 0, 1);
+      }
+
+      .loaded #ldr::after {
+        width: 90%;
+      }
+
+      #logo {
+        width: 48px;
+        height: 48px;
+        padding: 8px;
+        border: 1px solid #e5e5e5;
+        border-radius: 3px;
+        text-align: center;
+      }
+
+      #hdr {
+        min-height: 48px;
+        position: relative;
+      }
+
+      #logo,
+      #name,
+      #amt {
+        display: inline-block;
+        vertical-align: middle;
+        letter-spacing: -0.5px;
+      }
+
+      #amt {
+        position: absolute;
+        right: 0;
+        top: 0;
+        background: #fff;
+        color: #212121;
+      }
+
+      #name {
+        line-height: 48px;
+        margin-left: 12px;
+        font-size: 16px;
+        max-width: 140px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        color: #212121;
+      }
+
+      #logo + #name {
+        line-height: 20px;
+      }
+
+      #txt {
+        height: 200px;
+        text-align: center;
+      }
+
+      #title {
+        font-size: 20px;
+        line-height: 24px;
+        margin-bottom: 8px;
+        letter-spacing: -0.3px;
+      }
+
+      #msg,
+      #cncl {
+        font-size: 14px;
+        line-height: 20px;
+        color: #757575;
+        margin-bottom: 8px;
+        letter-spacing: -0.3px;
+      }
+
+      #cncl {
+        text-decoration: underline;
+        cursor: pointer;
+      }
+
+      #logo img {
+        max-width: 100%;
+        max-height: 100%;
+        vertical-align: middle;
+      }
+
+      @media (max-height: 580px), (max-width: 420px) {
+        #bg {
+          display: none;
+        }
+
+        body {
+          background: #3741c8;
+        }
+      }
+
+      @media (max-width: 420px) {
+        #cntnt {
+          padding: 16px;
+          width: 95%;
+        }
+
+        #name {
+          margin-left: 8px;
+        }
+      }
+
+      @media (max-height: 580px), (max-width: 420px) {
+        #ftr_new {
+          padding: 0 16px;
+        }
+      }
+    </style>
+  </head>
+
+  <script>
+    var events = {
+      page: "payment_redirect_postform",
+      props: {
+        payment_id: "pay_R7V17mrkrBqDNB",
+
+        merchant_id: "Oc4Ds3OsMhanNx",
+      },
+      load: true,
+      unload: true,
+    };
+  </script>
+  <script>
+    !(function (e) {
+      e.track = Boolean;
+      try {
+        if (/razorpay\.in$/.test(location.origin)) return;
+        if ("object" != typeof e.events) return;
+        var n = e.events.props;
+        if (0 === Object.keys(n).length) return;
+        var t,
+          o = e.events,
+          r = o.page,
+          a = o.load,
+          s = o.unload,
+          i = o.error,
+          c = "https://lumberjack.razorpay.com/v1/track",
+          u = "MC40OTMwNzgyMDM3MDgwNjI3Nw9YnGzW",
+          p = "function" == typeof navigator.sendBeacon,
+          d = Date.now(),
+          f = [
+            {
+              name: "ua_parser",
+              input_key: "user_agent",
+              output_key: "user_agent_parsed",
+            },
+          ];
+        function l(e, o) {
+          ((o = o || {}).beacon = p),
+            (o.time_since_render = Date.now() - d),
+            (o.url = location.href),
+            (function (e, n) {
+              if (e && n)
+                Object.keys(n).forEach(function (t) {
+                  e[t] = n[t];
+                });
+            })(o, n);
+          var a = {
+              addons: f,
+              events: [
+                { event: r + ":" + e, properties: o, timestamp: Date.now() },
+              ],
+            },
+            s = encodeURIComponent(
+              btoa(unescape(encodeURIComponent(JSON.stringify(a))))
+            ),
+            i = JSON.stringify({ key: u, data: s });
+          p
+            ? navigator.sendBeacon(c, i)
+            : ((t = new XMLHttpRequest()).open("post", c, !0), t.send(i));
+        }
+        a && l("load"),
+          s &&
+            e.addEventListener("unload", function () {
+              l("unload");
+            }),
+          i &&
+            e.addEventListener("error", function (e) {
+              l("error", {
+                message: e.message,
+                line: e.line,
+                col: e.col,
+                stack: e.error && e.error.stack,
+              });
+            });
+      } catch (e) {}
+      e.track = l;
+    })(window);
+  </script>
+
+  <body>
+    <div id="bg"></div>
+    <div
+      style="display: inline-block; vertical-align: middle; height: 100%"
+    ></div>
+    <div id="cntnt">
+      <div id="hdr">
+        <div id="logo">
+          <img
+            src="https://cdn.razorpay.comhttps://cdn-sg.razorpay.com/logos/QaeDvN2dvDBTzI_medium.jpg"
+          />
+        </div>
+
+        <div id="name">Razorpay Test Merchant</div>
+      </div>
+      <div id="ldr"></div>
+      <div id="txt">
+        <div
+          style="
+            display: inline-block;
+            vertical-align: middle;
+            white-space: normal;
+          "
+        >
+          <h2 id="title">Loading Bank page…</h2>
+          <p id="msg">Please wait while we redirect you to your Bank page</p>
+        </div>
+        <div
+          style="display: inline-block; vertical-align: middle; height: 100%"
+        ></div>
+      </div>
+      <div id="ftr">
+        <div style="display: inline-block">
+          Secured by
+          <img
+            style="vertical-align: middle; margin-bottom: 5px"
+            height="20px"
+            src="https://cdn.razorpay.com/logo.svg"
+          />
+        </div>
+        <div
+          style="display: inline-block; vertical-align: middle; height: 100%"
+        ></div>
+      </div>
+    </div>
+    <script>
+      var CheckoutBridge = window.CheckoutBridge;
+      try {
+        CheckoutBridge.setPaymentID("pay_R7V17mrkrBqDNB");
+      } catch (e) {}
+      var iosBridge =
+        window.webkit &&
+        webkit.messageHandlers &&
+        webkit.messageHandlers.CheckoutBridge;
+
+      try {
+        if (iosBridge) {
+          iosBridge.postMessage({
+            action: "setPaymentID",
+            body: {
+              payment_id: "pay_R7V17mrkrBqDNB",
+            },
+          });
+        }
+      } catch (e) {}
+
+      setTimeout(function () {
+        document.body.className = "loaded";
+      }, 10);
+
+      setTimeout(function () {
+        document.getElementById("title").innerHTML = "Still trying to load...";
+        document.getElementById("msg").innerHTML =
+          "The bank page is taking time to load.";
+      }, 10000);
+    </script>
+  </body>
+</html>

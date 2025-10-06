@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Razorpay Custom Checkout - CRED</title>
+    <script src="https://checkout.razorpay.com/v1/razorpay.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        text-align: center;
+        padding-top: 100px;
+      }
+      button {
+        font-size: 18px;
+        padding: 10px 25px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Pay with CRED</h2>
+    <button id="pay-button">Pay Now</button>
+
+    <script>
+      // Replace this with actual order_id from your server
+      //const orderId = "order_XXXXXXXXXXXXXXXX"; // <-- Your backend-generated order_id with "app_offer": true
+
+      const razorpay = new Razorpay({
+        key: "YOUR_KEY_ID", // Replace with your Razorpay Key ID (do not use secret here)
+        image: "https://i.imgur.com/n5tjHFD.jpg",
+      });
+
+      document
+        .getElementById("pay-button")
+        .addEventListener("click", function () {
+          const data = {
+            amount: 1000, // in paise
+            currency: "INR",
+            email: "gaurav.kumar@example.com",
+            contact: "9123456789",
+            //order_id: orderId,
+            method: "app",
+            provider: "cred",
+            notes: {
+              purpose: "CRED Payment Test",
+            },
+          };
+
+          razorpay.createPayment(data);
+
+          razorpay.on("payment.success", function (resp) {
+            alert("Payment Success!");
+            console.log("Payment ID:", resp.razorpay_payment_id);
+            console.log("Order ID:", resp.razorpay_order_id);
+            console.log("Signature:", resp.razorpay_signature);
+            // ✅ Send these details to your server for signature verification and storage
+          });
+
+          razorpay.on("payment.error", function (resp) {
+            alert("Payment Failed: " + resp.error.description);
+            console.error("Payment Error:", resp);
+          });
+        });
+    </script>
+  </body>
+</html>

@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Razorpay Custom Checkout - Async Payment</title>
+    <script src="https://checkout.razorpay.com/v1/razorpay.js"></script>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 20px;
+      }
+      button {
+        margin: 10px;
+        padding: 10px 20px;
+        font-size: 16px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Async Payment (UPI Collect)</h2>
+    <button id="payBtn">Pay Now</button>
+    <button id="cancelBtn">Cancel Payment</button>
+    <button id="retryBtn">Retry Payment</button>
+
+    <p id="status">Status: Idle</p>
+
+    <script>
+      let rp; // Razorpay instance
+
+      function createRazorpayInstance() {
+        rp = new Razorpay({
+          key: "rzp_test_qHO5zWaf7OUAPm", // replace with your test/live key
+        });
+
+        rp.once("ready", function (response) {
+          console.log("Available methods:", response.methods);
+        });
+
+        // Payment success (async)
+        rp.on("payment.success", function (resp) {
+          document.getElementById("status").innerText =
+            "Payment Initiated! ID: " + resp.razorpay_payment_id;
+          console.log("Async Payment Created:", resp);
+          console.log("⚠️ Final confirmation will come via webhook/polling.");
+        });
+
+        // Payment error
+        rp.on("payment.error", function (resp) {
+          document.getElementById("status").innerText =
+            "Payment Failed: " + resp.error.description;
+          console.error("Payment error:", resp.error);
+        });
+      }
+
+      // Initialize for first time
+      createRazorpayInstance();
+
+      // Pay button
+      document.getElementById("payBtn").addEventListener("click", function () {
+        document.getElementById("status").innerText = "Creating payment...";
+
+        rp.createPayment(
+          {
+            amount: 1000, // ₹10
+            currency: "INR",
+            contact: "9876543210",
+            email: "test@example.com",
+            method: "upi",
+            upi: {
+              flow: "collect",
+              vpa: "success@razorpay", // replace with actual VPA
+            },
+          },
+          {
+            paused: true,
+            message: "Confirming order...",
+          }
+        );
+
+        // Simulated async (e.g., AJAX to backend to validate order)
+        setTimeout(() => {
+          let ajax_success = true; // simulate success
+          if (ajax_success) {
+            document.getElementById("status").innerText =
+              "Order confirmed, resuming payment...";
+            rp.emit("payment.resume");
+          } else {
+            document.getElementById("status").innerText =
+              "Order failed, canceling payment.";
+            rp.emit("payment.cancel");
+          }
+        }, 2000);
+      });
+
+      // Cancel button
+      document
+        .getElementById("cancelBtn")
+        .addEventListener("click", function () {
+          if (rp) {
+            rp.emit("payment.cancel");
+            document.getElementById("status").innerText =
+              "Payment canceled manually.";
+          }
+        });
+
+      // Retry button -> re-initialize instance and allow fresh payment
+      document
+        .getElementById("retryBtn")
+        .addEventListener("click", function () {
+          createRazorpayInstance();
+          document.getElementById("status").innerText =
+            "New Razorpay instance ready. Click Pay Now.";
+        });
+    </script>
+  </body>
+</html>

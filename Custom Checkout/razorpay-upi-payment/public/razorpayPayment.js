@@ -1,6 +1,6 @@
 var razorpay = new Razorpay({
   //key: "rzp_test_qHO5zWaf7OUAPm",
-  key: "rzp_live_Z0UOREZiFYcSqz",
+  key: "rzp_live_kZq2u3OSeYjsc1",
 });
 
 let countdownTimer;
@@ -77,6 +77,86 @@ function showCancelMessage() {
   document.body.appendChild(cancelMsg);
 }
 
+// document.getElementById("pay-btn").addEventListener("click", function () {
+//   const os = detectOS();
+//   sendLogToServer(`Operating System: ${os}`);
+
+//   const container = document.getElementById("upi-apps-container");
+//   container.innerHTML = ""; // Clear previous results
+
+//   // Display appropriate message based on OS
+//   if (os === "Android" || os === "iOS") {
+//     sendLogToServer(`UPI intent is supported on ${os}.`);
+//     razorpay
+//       .getSupportedUpiIntentApps()
+//       .then(function (apps) {
+//         sendLogToServer(
+//           "Available UPI Apps from Razorpay: " + JSON.stringify(apps)
+//         );
+
+//         if (apps && apps.length > 0) {
+//           sendLogToServer(`Total Available UPI Apps on Device: ${apps.length}`);
+//           apps.forEach((appCode) => {
+//             const appElement = document.createElement("button");
+//             appElement.className = "upi-app";
+//             appElement.style.cursor = "pointer";
+//             appElement.style.margin = "5px";
+//             appElement.style.border = "none";
+//             appElement.style.background = "transparent"; // Make the button background transparent
+
+//             let appLogoUrl = "";
+
+//             // Define logos for specific apps
+//             switch (appCode) {
+//               case "gpay":
+//                 appLogoUrl =
+//                   "https://upload.wikimedia.org/wikipedia/commons/f/f2/Google_Pay_Logo.svg";
+//                 break;
+//               case "phonepe":
+//                 appLogoUrl =
+//                   "https://upload.wikimedia.org/wikipedia/commons/7/71/PhonePe_Logo.svg";
+//                 break;
+//               case "paytm":
+//                 appLogoUrl =
+//                   "https://upload.wikimedia.org/wikipedia/commons/2/24/Paytm_Logo_%28standalone%29.svg";
+//                 break;
+//               default:
+//                 appLogoUrl =
+//                   "https://upload.wikimedia.org/wikipedia/commons/6/6f/UPI_logo.svg"; // Placeholder for "Any"
+//             }
+
+//             // Create button with only logo and no text
+//             const appLogo = document.createElement("img");
+//             appLogo.src = appLogoUrl;
+//             appLogo.alt = `${appCode.toUpperCase()} Logo`; // Provide alt text for accessibility
+//             appLogo.style.width = "50px"; // Set width for consistency
+//             appLogo.style.height = "50px"; // Set height for consistency
+//             appElement.appendChild(appLogo);
+
+//             appElement.addEventListener("click", function () {
+//               sendLogToServer(`Clicked on ${appCode}`);
+//               checkAndInitiatePaymentForApp(appCode);
+//             });
+
+//             container.appendChild(appElement);
+//           });
+//         } else {
+//           container.innerText = "No UPI intent apps available";
+//           sendLogToServer("No UPI apps available on this device.");
+//         }
+//       })
+//       .catch(function (error) {
+//         sendLogToServer("Error fetching UPI apps: " + error);
+//       });
+//   } else if (os === "macOS" || os === "Windows") {
+//     sendLogToServer(`${os} does not support UPI Intent functionality.`);
+//     alert(`${os} does not support UPI Intent functionality.`);
+//   } else {
+//     sendLogToServer(`UPI intent functionality is not supported on ${os}.`);
+//     alert(`UPI intent functionality is not supported on ${os}.`);
+//   }
+// });
+
 document.getElementById("pay-btn").addEventListener("click", function () {
   const os = detectOS();
   sendLogToServer(`Operating System: ${os}`);
@@ -119,6 +199,41 @@ document.getElementById("pay-btn").addEventListener("click", function () {
               case "paytm":
                 appLogoUrl =
                   "https://upload.wikimedia.org/wikipedia/commons/2/24/Paytm_Logo_%28standalone%29.svg";
+                break;
+              case "cred":
+                // Cred official logo from Wikimedia
+                appLogoUrl = "logos/cred.png";
+                break;
+              case "bhim":
+                appLogoUrl = "logos/bhim.png"; // Use your real BHIM logo PNG file here
+                break;
+              case "popclubapp":
+                appLogoUrl = "logos/popclubapp.png"; // Use the real Popclubapp PNG logo here
+                break;
+              case "mobikwik":
+                appLogoUrl = "logos/mobikwik.png";
+                break;
+              case "super_money":
+                // No official Wikimedia logo, fallback to generic UPI logo
+                appLogoUrl =
+                  "https://upload.wikimedia.org/wikipedia/commons/6/6e/SuperMoney_Logo.png";
+                break;
+              case "moneyview":
+                // No official Wikimedia logo, fallback to generic UPI logo
+                appLogoUrl = "logos/moneyview.png";
+                break;
+              case "icici":
+                // No official Wikimedia logo, fallback to generic UPI logo
+                appLogoUrl = "logos/icici.png";
+                break;
+              case "navi":
+                // No official Wikimedia logo, fallback to generic UPI logo
+                appLogoUrl =
+                  "https://upload.wikimedia.org/wikipedia/commons/f/f7/Navi_New_Logo.png";
+                break;
+              case "payzapp":
+                // No official Wikimedia logo, fallback to generic UPI logo
+                appLogoUrl = "logos/payzapp.png";
                 break;
               default:
                 appLogoUrl =
@@ -195,10 +310,10 @@ function initiatePayment(appCode) {
   const paymentData = {
     amount: 100,
     method: "upi",
-    contact: "9000090000",
+    contact: "8788128004",
     email: "gaurav.kumar@example.com",
-    callback_url: "https://www.google.com/",
-    redirect: "true",
+    // callback_url: "https://www.google.com/",
+    // redirect: "true",
   };
 
   sendLogToServer(`Initiating payment using ${appCode.toUpperCase()}...`);

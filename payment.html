@@ -2,32 +2,21 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
   var options = {
-    key: "rzp_test_6dUxlFktXvzpE9", // Enter the Key ID generated from the Dashboard
-    amount: "50000", // Amount is in currency subunits.
-    currency: "MYR",
-    // name: "Acme Corp", //your business name
-    // description: "Test Transaction",
-    // image: "https://example.com/your_logo",
-    order_id: "order_R0354ryUiYqF6q", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-    handler: function (response) {
-      alert(response.razorpay_payment_id);
-      alert(response.razorpay_order_id);
-      alert(response.razorpay_signature);
-    },
-    //customer_id: "cust_QzxetG6XVjb7I7",
-    //remember_customer: true,
-    //save: 1,
-    prefill: {
-      //We recommend using the prefill parameter to auto-fill customer's contact information, especially their phone number
-      name: "test", //your customer's name
-      email: "test@gmail.com",
-      contact: "60345675444", //Provide the customer's phone number for better conversion rates
-    },
-    notes: {
-      address: "Razorpay Corporate Office",
-    },
+    key: "rzp_live_mLGPVAT71TJSbl",
+    amount: 500,
+    currency: "INR",
+    image:
+      "https://d1a72myucz9rb3.cloudfront.net/staticfiles/images/mygate_logo_rzp.png",
+    retry: false,
+    redirect: true,
     theme: {
-      color: "#3399cc",
+      color: "#092d35",
+      hide_topbar: true,
+    },
+    modal: {
+      ondismiss: function () {
+        send_failure("Cancelled by user", data.txnid);
+      },
     },
   };
   var rzp1 = new Razorpay(options);

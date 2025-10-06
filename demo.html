@@ -2,43 +2,16 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
   var options = {
-    key: "rzp_test_qHO5zWaf7OUAPm", // Enter the Key ID generated from the Dashboard
-    amount: "100000", // Amount is in currency subunits. 100 paise = ₹1
-    currency: "INR",
-    //order_id: "order_QK1wKNWw0WVdzF", // Sample Order ID
-    handler: function (response) {
-      console.log(response.razorpay_payment_id);
-      console.log(response.razorpay_order_id);
-      console.log(response.razorpay_signature);
-      alert(response.razorpay_payment_id);
-      alert(response.razorpay_order_id);
-      alert(response.razorpay_signature);
-    },
-    receipt: "demoreceipt",
-    notes: {
-      order_id: "games24/7ORDER demooooooooo",
-    },
-    // prefill: {
-    //   name: "Gaurav Kumar",
-    //   email: "gaurav.kumar@example.com",
-    //   contact: "9678090000",
-    // },
-    // readonly: {
-    //   contact: true,
-    //   email: true,
-    // },
+    key: "rzp_live_sg_X9D7MxYZxmdjPQ", // Enter the Key ID generated from the Dashboard
+    amount: "50000", // Amount is in currency subunits.
+    currency: "SGD",
+    // name: "Acme Corp", //your business name
+    // description: "Test Transaction",
+    //image: "https://example.com/your_logo",
+    //order_id: "order_RB1zp4kONqCyis", // This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    //callback_url: "https://eneqd3r9zrjok.x.pipedream.net/",
   };
-
   var rzp1 = new Razorpay(options);
-  rzp1.on("payment.failed", function (response) {
-    alert(response.error.code);
-    alert(response.error.description);
-    alert(response.error.source);
-    alert(response.error.step);
-    alert(response.error.reason);
-    alert(response.error.metadata.order_id);
-    alert(response.error.metadata.payment_id);
-  });
   document.getElementById("rzp-button1").onclick = function (e) {
     rzp1.open();
     e.preventDefault();

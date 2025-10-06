@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>UPI Collect S2S</title>
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        padding: 50px 20px;
+        color: #333;
+      }
+
+      h2 {
+        color: #444;
+        margin-bottom: 20px;
+      }
+
+      form {
+        background: #fff;
+        padding: 30px 25px;
+        border-radius: 12px;
+        box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+        width: 100%;
+        max-width: 400px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+      }
+
+      input[type="text"] {
+        padding: 12px 15px;
+        border: 1px solid #ccc;
+        border-radius: 6px;
+        font-size: 16px;
+      }
+
+      button {
+        background-color: #4a90e2;
+        color: white;
+        padding: 12px;
+        border: none;
+        border-radius: 6px;
+        font-size: 16px;
+        cursor: pointer;
+        transition: background-color 0.2s ease;
+      }
+
+      button:hover {
+        background-color: #357abd;
+      }
+
+      #resultMessage {
+        margin-top: 20px;
+        font-size: 18px;
+        font-weight: 500;
+        color: #222;
+      }
+
+      #resultMessage.success {
+        color: green;
+      }
+
+      #resultMessage.failed {
+        color: red;
+      }
+
+      #resultMessage.timeout {
+        color: orange;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>UPI Auto-Debit Authorization</h2>
+
+    <form id="vpaForm">
+      <input
+        type="text"
+        id="vpaInput"
+        placeholder="Enter your VPA (e.g., abc@upi)"
+        required
+      />
+      <button type="submit">Start Authorization</button>
+    </form>
+
+    <p id="resultMessage"></p>
+
+    <script>
+      document
+        .getElementById("vpaForm")
+        .addEventListener("submit", async function (e) {
+          e.preventDefault();
+
+          const vpa = document.getElementById("vpaInput").value.trim();
+          const resultEl = document.getElementById("resultMessage");
+
+          resultEl.textContent = "Processing...";
+          resultEl.className = "";
+
+          try {
+            const response = await fetch("/start-payment", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ vpa }),
+            });
+
+            const data = await response.json();
+
+            if (data.status === "Payment Successful ✅") {
+              resultEl.textContent = "✅ Payment Authorized Successfully!";
+              resultEl.className = "success";
+            } else if (data.status === "failed") {
+              resultEl.textContent = "❌ Payment Failed. Please try again.";
+              resultEl.className = "failed";
+            } else if (data.status === "timeout") {
+              resultEl.textContent =
+                "⚠️ Payment timed out. Please approve request in UPI app.";
+              resultEl.className = "timeout";
+            } else {
+              resultEl.textContent = data.error || "Something went wrong.";
+              resultEl.className = "failed";
+            }
+          } catch (err) {
+            resultEl.textContent = "❌ Network error. Try again later.";
+            resultEl.className = "failed";
+            console.error("Client Error:", err);
+          }
+        });
+    </script>
+  </body>
+</html>
