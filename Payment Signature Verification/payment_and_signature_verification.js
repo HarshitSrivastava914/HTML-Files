@@ -10,8 +10,8 @@ app.use(express.json());
 app.use(express.static(path.join(__dirname))); // Serve static files
 
 // Razorpay API Configuration
-const razorpayKeyId = "rzp_test_qHO5zWaf7OUAPm"; // Replace with your Razorpay Key ID
-const razorpaySecretKey = "UyjqOzI0u61YS5lpwL4aJM9X"; // Replace with your Razorpay Secret Key
+const razorpayKeyId = "rzp_test_p3LrBQxnygLL8o"; // Replace with your Razorpay Key ID
+const razorpaySecretKey = "dAqnV22gp7wS8i5D5qC2fjkn"; // Replace with your Razorpay Secret Key
 
 const razorpay = new Razorpay({
   key_id: razorpayKeyId,
@@ -35,8 +35,8 @@ app.get("/", (req, res) => {
     var options = {
       key: "${razorpayKeyId}", // Replace with your Razorpay Key ID
       amount: "100", // Amount in paise (50000 refers to ₹500)
-      currency: "INR",
-      order_id: "order_PsP7pB7cfRrZrr", // Replace with an actual Razorpay Order ID
+      currency: "MYR",
+      order_id: "order_RkKUkTAjWrYtdf", // Replace with an actual Razorpay Order ID
       handler: function (response) {
         fetch("/verify-payment", {
           method: "POST",

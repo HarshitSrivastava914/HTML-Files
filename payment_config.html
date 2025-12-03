@@ -2,12 +2,9 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
   var options = {
-    key: "rzp_live_Z0UOREZiFYcSqz", // Enter the Key ID generated from the Dashboard
+    key: "rzp_live_H7G1YmCo7Hwqn4", // Enter the Key ID generated from the Dashboard
     amount: "30000", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
-    currency: "INR",
-    //name: "Harshit", //your business name
-    description: "Test Transaction",
-    image: "https://example.com/your_logo",
+    currency: "MYR",
     //order_id: "order_PzwQcvPdXQvXCK", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
     callback_url: "https://www.google.com/",
     prefill: {
@@ -16,37 +13,43 @@
       email: "gaurav.kumar@example.com",
       contact: "9000090000", //Provide the customer's phone number for better conversion rates
     },
-    retry: "false",
-    notes: {
-      address: "Razorpay Corporate Office",
-    },
     theme: {
       //color: "#3399cc",
       hide_topbar: true,
     },
     config: {
       display: {
-        blocks: {
-          custom: {
-            name: "Selected Payment Methods",
-            instruments: [
-              {
-                method: "emi",
-                issuers: ["SCBL"],
-              },
-              {
-                method: "upi",
-                flows: ["intent"],
-              },
-            ],
+        hide: [
+          {
+            method: "wallet",
+            wallets: ["grabpay", "mcash", "shopback"],
           },
-        },
-        sequence: ["block.custom"],
-        preferences: {
-          show_default_blocks: false,
-        },
+        ],
       },
     },
+    // config: {
+    //   display: {
+    //     blocks: {
+    //       custom: {
+    //         name: "Selected Payment Methods",
+    //         instruments: [
+    //           {
+    //             method: "emi",
+    //             issuers: ["SCBL"],
+    //           },
+    //           {
+    //             method: "upi",
+    //             flows: ["intent"],
+    //           },
+    //         ],
+    //       },
+    //     },
+    //     sequence: ["block.custom"],
+    //     preferences: {
+    //       show_default_blocks: false,
+    //     },
+    //   },
+    // },
   };
   var rzp1 = new Razorpay(options);
   document.getElementById("rzp-button1").onclick = function (e) {

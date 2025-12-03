@@ -11,14 +11,14 @@ const Razorpay = require("razorpay");
 
 // Prepare attributes
 let attributes = {
-  submerchant_id: "R41nppOBRPYbCR",
+  submerchant_id: "RQXOKMu3Tpxl1x",
   timestamp: Math.floor(Date.now() / 1000).toString(), // ensure it's a string
 };
 
 // Generate onboarding signature
 let onboarding_signature = generateOnboardingSignature(
   attributes,
-  "Csptc9hTi1COkRTUplPTVgiT" // your shared secret
+  "n9f8dEfJhDXdcTDADlokMMml" // your shared secret
 );
 
 console.log("Onboarding Signature:", onboarding_signature);

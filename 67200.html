@@ -1,0 +1,35 @@
+<button id="rzp-button1">Pay</button>
+<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+<script>
+  const options = {
+    key: "rzp_test_p3LrBQxnygLL8o",
+    //order_id: "order_RkKbmvaxdGXRmC",
+    currency: "MYR",
+    amount: "1100",
+    notes: {
+      gpId: "4886",
+    },
+    // method: {
+    //   card: "false",
+    //   fpx: "true",
+    //   wallet: "false",
+    //   netbanking: "false",
+    //   upi: "false",
+    // },
+    //name: "TIO MarketPlace",
+    //image: "/frontend/web/images/curlecLogo.png",
+    theme: {
+      color: "#794fec",
+    },
+    //timeout: 600,
+    callback_url: "https://www.youtube.com/",
+    redirect: "true",
+    //modal: {},
+  };
+
+  var rzp1 = new Razorpay(options);
+  document.getElementById("rzp-button1").onclick = function (e) {
+    rzp1.open();
+    e.preventDefault();
+  };
+</script>

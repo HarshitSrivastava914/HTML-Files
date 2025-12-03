@@ -2,14 +2,20 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
   var options = {
-    key: "rzp_live_sg_X9D7MxYZxmdjPQ", // Enter the Key ID generated from the Dashboard
-    amount: "50000", // Amount is in currency subunits.
+    key: "rzp_test_sg_jTyhhA2UxKAEaT", // Enter the Key ID generated from the Dashboard
+    amount: "1000", // Amount is in currency subunits.
     currency: "SGD",
+    // prefill: {
+    //   name: "testing",
+    //   email: "test@gmail.com",
+    //   contact: "+60123456789",
+    // },
     // name: "Acme Corp", //your business name
     // description: "Test Transaction",
     //image: "https://example.com/your_logo",
-    //order_id: "order_RB1zp4kONqCyis", // This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-    //callback_url: "https://eneqd3r9zrjok.x.pipedream.net/",
+    order_id: "order_RhtqwYrYAVixNj", // This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+    // callback_url: "https://www.youtube.com/",
+    // redirect: true,
   };
   var rzp1 = new Razorpay(options);
   document.getElementById("rzp-button1").onclick = function (e) {

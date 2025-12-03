@@ -12,8 +12,8 @@ app.use(express.static("public"));
 
 // Razorpay instance
 const razorpay = new Razorpay({
-  key_id: "rzp_live_Z0UOREZiFYcSqz",
-  key_secret: "cqxvuwfrtpMtek9ddfhPdIQb",
+  key_id: "rzp_live_Q8ur2eCvhLG4Uk",
+  key_secret: "7RIALIzKuujYCyvpPl0W3wry",
 });
 
 // Route: Create Razorpay Order
@@ -41,7 +41,7 @@ app.get("/methods", async (req, res) => {
   try {
     const response = await axios.get("https://api.razorpay.com/v1/methods", {
       auth: {
-        username: "rzp_live_Z0UOREZiFYcSqz",
+        username: "rzp_live_Q8ur2eCvhLG4Uk",
         //password: "cqxvuwfrtpMtek9ddfhPdIQb",
       },
     });

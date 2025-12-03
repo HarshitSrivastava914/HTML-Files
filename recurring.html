@@ -2,9 +2,9 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
   const options = {
-    key: "rzp_test_14eHSPy2En0Hum",
-    order_id: "order_RM3svoxU3pRTgM",
-    customer_id: "cust_RLHCXxdEK7R0uH",
+    key: "rzp_test_ZzNdLsY8FRBbDG",
+    order_id: "order_RjvQ0YqYZm5CYt",
+    customer_id: "cust_RjvPTfMN2UZhbn",
     recurring: "1",
     handler: function (response) {
       alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
@@ -12,11 +12,11 @@
       alert(`Signature: ${response.razorpay_signature}`);
       setIsLoading(false);
     },
-    prefill: {
-      name: "Devansh Pehlajani",
-      email: "devansh.pehlajani.in@rupeek.com",
-      contact: "7900385322",
-    },
+    // prefill: {
+    //   name: "Devansh Pehlajani",
+    //   email: "devansh.pehlajani.in@rupeek.com",
+    //   contact: "7900385322",
+    // },
     // readonly: {
     //   contact: true,
     //   email: true,
