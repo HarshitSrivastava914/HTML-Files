@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>UPI Collect Payment</title>
+
+    <style>
+      input,
+      button {
+        padding: 10px;
+        margin-top: 10px;
+        width: 250px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Enter your UPI ID (VPA)</h2>
+
+    <input id="vpa" placeholder="example@upi" />
+    <br />
+
+    <button onclick="startCollect()">Pay ₹100</button>
+
+    <script>
+      async function startCollect() {
+        const vpa = document.getElementById("vpa").value;
+
+        if (!vpa.includes("@")) {
+          alert("Enter valid UPI ID");
+          return;
+        }
+
+        const res = await fetch("/api/payment/create", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: 100,
+            //order_id: "order_test_123",
+            vpa,
+          }),
+        });
+
+        const data = await res.json();
+        const pollUrl = data.pollUrl;
+
+        poll(pollUrl);
+      }
+
+      async function poll(url) {
+        const interval = setInterval(async () => {
+          const r = await fetch(
+            `/api/payment/poll?url=${encodeURIComponent(url)}`
+          );
+          const d = await r.json();
+
+          if (d.status === "authorized" || d.status === "captured") {
+            clearInterval(interval);
+            alert("Payment Successful");
+            window.location = "/success.html";
+          }
+
+          if (d.status === "failed") {
+            clearInterval(interval);
+            alert("Payment Failed");
+            window.location = "/failed.html";
+          }
+        }, 3000);
+      }
+    </script>
+  </body>
+</html>

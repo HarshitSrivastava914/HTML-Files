@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Razorpay Currency Condition Checkout</title>
+
+    <!-- Razorpay Checkout -->
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 40px;
+      }
+      select,
+      button {
+        padding: 10px;
+        font-size: 16px;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Razorpay Checkout</h2>
+
+    <!-- Currency Selector -->
+    <label>
+      Currency:
+      <select id="currency">
+        <option value="INR">INR</option>
+        <option value="USD">USD</option>
+      </select>
+    </label>
+
+    <br /><br />
+
+    <button id="rzp-button1">Open Checkout</button>
+
+    <script>
+      document.getElementById("rzp-button1").onclick = function (e) {
+        e.preventDefault();
+
+        var selectedCurrency = document.getElementById("currency").value;
+
+        // Base options
+        var options = {
+          key: "rzp_live_As4JuG1eCtI19k",
+          amount: "6000",
+          currency: selectedCurrency,
+          prefill: {
+            email: "gaurav.kumar@example.com",
+            contact: "919900000000",
+          },
+          handler: function (response) {
+            alert("Payment ID: " + response.razorpay_payment_id);
+          },
+          modal: {
+            ondismiss: function () {
+              console.log("Checkout closed by user");
+            },
+          },
+        };
+
+        // 👉 NEW CONDITION
+        // If currency is INR → add config (hide options)
+        // If currency is USD → normal checkout (no config)
+        if (selectedCurrency === "INR") {
+          options.config = {
+            display: {
+              hide: [{ method: "wallet", wallets: ["paypal"] }],
+            },
+          };
+        }
+
+        // Open Razorpay Checkout
+        var rzp1 = new Razorpay(options);
+        rzp1.open();
+      };
+    </script>
+  </body>
+</html>

@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>UPI Intent Payment</title>
+    <style>
+      .btn {
+        padding: 12px 20px;
+        margin: 10px;
+        display: block;
+        width: 200px;
+        background: black;
+        color: white;
+        text-align: center;
+        border-radius: 6px;
+        cursor: pointer;
+      }
+    </style>
+  </head>
+  <body>
+    <h2>Pay Using UPI Apps</h2>
+    <div id="buttons"></div>
+
+    <script>
+      async function initIntentPage() {
+        console.log("----- STEP 1: Calling create payment API -----");
+        const params = {
+          amount: 100,
+          email: "test@test.com",
+          contact: "9999999999",
+        };
+
+        const res = await fetch("/api/payment/create", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify(params),
+        });
+
+        const data = await res.json();
+        console.log("Payment API response:", data);
+
+        const device = data.device;
+        const psp = data.pspLinks;
+        const pollUrl = data.pollUrl;
+
+        console.log("Device:", device);
+        console.log("PSP Links:", psp);
+        console.log("Poll URL:", pollUrl);
+
+        const container = document.getElementById("buttons");
+
+        // Create PSP buttons dynamically
+        Object.keys(psp).forEach((name) => {
+          const btn = document.createElement("div");
+          btn.className = "btn";
+          btn.innerText = name.toUpperCase();
+
+          btn.onclick = () => {
+            console.log(`Launching ${name.toUpperCase()} deeplink:`, psp[name]);
+            window.location.href = psp[name]; // launch UPI intent
+            startPolling(pollUrl);
+          };
+          container.appendChild(btn);
+        });
+      }
+
+      async function startPolling(url) {
+        console.log("Starting polling for URL:", url);
+        const poll = setInterval(async () => {
+          const r = await fetch(
+            `/api/payment/poll?url=${encodeURIComponent(url)}`
+          );
+          const d = await r.json();
+          console.log("Polling response:", d);
+
+          if (d.status === "authorized" || d.status === "captured") {
+            clearInterval(poll);
+            alert("Payment Successful");
+            window.location.href = "/success.html";
+          }
+
+          if (d.status === "failed") {
+            clearInterval(poll);
+            alert("Payment Failed");
+            window.location.href = "/failed.html";
+          }
+        }, 3000);
+      }
+
+      initIntentPage();
+    </script>
+  </body>
+</html>

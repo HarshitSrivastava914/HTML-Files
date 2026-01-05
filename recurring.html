@@ -2,9 +2,9 @@
 <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 <script>
   const options = {
-    key: "rzp_test_ZzNdLsY8FRBbDG",
-    order_id: "order_RjvQ0YqYZm5CYt",
-    customer_id: "cust_RjvPTfMN2UZhbn",
+    key: "rzp_live_fQOafVJoJqscJ6",
+    order_id: "order_RxmQlp2UfVN1SV",
+    customer_id: "cust_RxmMM5YmAVTgse",
     recurring: "1",
     handler: function (response) {
       alert(`Payment successful! Payment ID: ${response.razorpay_payment_id}`);
@@ -27,6 +27,10 @@
     },
     theme: {
       color: "#F37254",
+    },
+    hidden: {
+      email: "true",
+      contact: "true",
     },
     // config: {
     //   display: {

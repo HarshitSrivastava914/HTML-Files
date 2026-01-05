@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>New Mandate - Curlec Simulator</title>
+    <meta charset="UTF-8" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      input,
+      select {
+        width: 300px;
+      }
+      pre {
+        background: #f4f4f4;
+        padding: 10px;
+        border: 1px solid #ccc;
+        width: 95%;
+        overflow-x: auto;
+        white-space: pre-wrap;
+        word-break: break-all;
+      }
+      button.copy-btn {
+        margin-top: 5px;
+        padding: 6px 12px;
+        cursor: pointer;
+      }
+      .copied {
+        color: green;
+        font-size: 12px;
+        margin-left: 10px;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2>New Mandate (Browser Redirect)</h2>
+
+    <form
+      id="mandateForm"
+      method="POST"
+      action="https://demo.stage.curlec.com/new-mandate"
+    >
+      <label>Reference Number *</label><br />
+      <input name="referenceNumber" required value="test10" /><br /><br />
+
+      <label>Name *</label><br />
+      <input name="name" required value="test test" /><br /><br />
+
+      <label>Email *</label><br />
+      <input
+        name="emailAddress"
+        type="email"
+        required
+        value="test@gmail.com"
+      /><br /><br />
+
+      <label>Phone Number *</label><br />
+      <input name="phoneNumber" required value="9111111111" /><br /><br />
+
+      <label>ID Type *</label><br />
+      <select name="idType" required>
+        <option value="NRIC" selected>NRIC</option>
+        <option value="PASSPORT_NUMBER">Passport</option>
+        <option value="BUSINESS_REGISTRATION_NUMBER">
+          Business Registration
+        </option>
+      </select>
+      <br /><br />
+
+      <label>ID Number *</label><br />
+      <input name="idValue" required value="1234" /><br /><br />
+
+      <label>Bank ID *</label><br />
+      <input name="bankId" type="number" required value="19" /><br /><br />
+
+      <label>Account Type *</label><br />
+      <select name="businessModel" required>
+        <option value="B2C" selected>Personal Account</option>
+        <option value="B2B1">Business Account</option>
+      </select>
+      <br /><br />
+
+      <label>Effective Date *</label><br />
+      <input name="effectiveDate" type="date" required value="2025-12-17" />
+      <br /><br />
+
+      <label>Expiry Date</label><br />
+      <input name="expiryDate" type="date" value="2025-12-31" /><br /><br />
+
+      <label>Max Amount per DD Transaction *</label><br />
+      <input name="amount" type="number" step="0.01" required value="1" />
+      <br /><br />
+
+      <label>Frequency *</label><br />
+      <select name="frequency" required>
+        <option value="DAILY" selected>Daily</option>
+        <option value="WEEKLY">Weekly</option>
+        <option value="MONTHLY">Monthly</option>
+        <option value="YEARLY">Yearly</option>
+      </select>
+      <br /><br />
+
+      <label>Maximum Frequency *</label><br />
+      <input name="maximumFrequency" type="number" value="99" required />
+      <br /><br />
+
+      <label>Purpose Of Payment *</label><br />
+      <input name="purposeOfPayment" required value="test" /><br /><br />
+
+      <label>Merchant ID *</label><br />
+      <input name="merchantId" required value="214267300" /><br /><br />
+
+      <label>Employee ID *</label><br />
+      <input name="employeeId" required value="21426735" /><br /><br />
+
+      <!-- Required by Curlec -->
+      <input type="hidden" name="method" value="03" />
+      <input type="hidden" name="type" value="01" />
+      <input type="hidden" name="paymentMethod" value="1" />
+
+      <button type="submit">Proceed to Bank</button>
+    </form>
+
+    <hr />
+
+    <h3>🔗 Formed Request (Copy & Paste)</h3>
+    <pre id="fullUrlPreview"></pre>
+    <button class="copy-btn" onclick="copyUrl()">📋 Copy URL</button>
+    <span id="copyStatus" class="copied"></span>
+
+    <script>
+      const form = document.getElementById("mandateForm");
+      const fullUrlPreview = document.getElementById("fullUrlPreview");
+      const copyStatus = document.getElementById("copyStatus");
+
+      function updatePreview() {
+        const baseUrl = form.action;
+        const formData = new FormData(form);
+        const params = new URLSearchParams();
+
+        for (let [key, value] of formData.entries()) {
+          params.append(key, value);
+        }
+
+        fullUrlPreview.textContent = `${baseUrl}?${params.toString()}`;
+      }
+
+      function copyUrl() {
+        navigator.clipboard.writeText(fullUrlPreview.textContent).then(() => {
+          copyStatus.textContent = "Copied!";
+          setTimeout(() => (copyStatus.textContent = ""), 2000);
+        });
+      }
+
+      form.addEventListener("input", updatePreview);
+      form.addEventListener("change", updatePreview);
+
+      updatePreview();
+    </script>
+  </body>
+</html>

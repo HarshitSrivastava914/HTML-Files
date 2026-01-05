@@ -1,6 +1,6 @@
 var razorpay = new Razorpay({
   //key: "rzp_test_qHO5zWaf7OUAPm",
-  key: "rzp_live_kZq2u3OSeYjsc1",
+  key: "rzp_live_RsKoYLrIUlLcHD",
 });
 
 let countdownTimer;
@@ -312,8 +312,8 @@ function initiatePayment(appCode) {
     method: "upi",
     contact: "8788128004",
     email: "gaurav.kumar@example.com",
-    // callback_url: "https://www.google.com/",
-    // redirect: "true",
+    callback_url: "https://www.google.com/",
+    redirect: "true",
   };
 
   sendLogToServer(`Initiating payment using ${appCode.toUpperCase()}...`);

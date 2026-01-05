@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Razorpay Checkout</title>
+  </head>
+  <body style="text-align: center; margin-top: 50px; font-family: Arial">
+    <h1>Razorpay Checkout Demo</h1>
+    <button id="rzp-button">Pay Now</button>
+
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <script>
+      var options = {
+        key: "rzp_test_sg_jBej8tGLL9nmJf",
+        amount: "50000",
+        currency: "SGD",
+        order_id: "order_Rsf3Fjt8rrdpS4",
+        callback_url: "http://localhost:3000/callback",
+        redirect: true,
+      };
+
+      document.getElementById("rzp-button").onclick = function () {
+        var rzp = new Razorpay(options);
+        rzp.open();
+      };
+    </script>
+  </body>
+</html>

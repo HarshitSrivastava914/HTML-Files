@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Payment Success</title>
+  </head>
+  <body style="font-family: Arial; text-align: center; margin-top: 60px">
+    <h1>🎉 Payment Successful!</h1>
+
+    <div id="data"></div>
+
+    <script>
+      fetch("/payment-data")
+        .then((res) => res.json())
+        .then((data) => {
+          document.getElementById("data").innerHTML = `
+          <p><b>Payment ID:</b> ${data.razorpay_payment_id || "N/A"}</p>
+          <p><b>Order ID:</b> ${data.razorpay_order_id || "N/A"}</p>
+          <p><b>Signature:</b> ${data.razorpay_signature || "N/A"}</p>
+        `;
+        });
+    </script>
+  </body>
+</html>

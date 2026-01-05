@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>New Mandate for Authoriser (Backend)</title>
+    <meta charset="UTF-8" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+      input {
+        width: 400px;
+      }
+      pre {
+        background: #f4f4f4;
+        padding: 10px;
+        border: 1px solid #ccc;
+        white-space: pre-wrap;
+        word-break: break-word;
+      }
+      .warning {
+        background: #fff3cd;
+        border: 1px solid #ffeeba;
+        padding: 10px;
+        margin-bottom: 20px;
+        color: #856404;
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2>New Mandate for Authoriser (Backend)</h2>
+
+    <div class="warning">
+      ❗ <strong>This is NOT a Browser API</strong><br />
+      Use this API via <strong>Backend / Postman / cURL</strong> only.<br />
+      Do NOT use HTML form redirects.
+    </div>
+
+    <form method="POST" action="/api/mandate-authoriser">
+      <label>Base URL</label><br />
+      <input name="baseUrl" value="<%= baseUrl %>" size="80" required />
+      <br /><br />
+
+      <label>Reference Number</label><br />
+      <input
+        name="referenceNumber"
+        value="<%= body.referenceNumber %>"
+        required
+      />
+      <br /><br />
+
+      <label>Name</label><br />
+      <input name="name" value="<%= body.name %>" required />
+      <br /><br />
+
+      <label>Email Address</label><br />
+      <input
+        name="emailAddress"
+        type="email"
+        value="<%= body.emailAddress %>"
+        required
+      />
+      <br /><br />
+
+      <label>Amount</label><br />
+      <input
+        name="amount"
+        type="number"
+        step="0.01"
+        value="<%= body.amount %>"
+        required
+      />
+      <br /><br />
+
+      <label>Frequency</label><br />
+      <input name="frequency" value="<%= body.frequency %>" required />
+      <br /><br />
+
+      <label>Maximum Frequency</label><br />
+      <input
+        name="maximumFrequency"
+        value="<%= body.maximumFrequency %>"
+        required
+      />
+      <br /><br />
+
+      <label>Purpose Of Payment</label><br />
+      <input
+        name="purposeOfPayment"
+        value="<%= body.purposeOfPayment %>"
+        required
+      />
+      <br /><br />
+
+      <label>Business Model</label><br />
+      <input name="businessModel" value="<%= body.businessModel %>" required />
+      <br /><br />
+
+      <label>Bank ID</label><br />
+      <input name="bankId" value="<%= body.bankId %>" required />
+      <br /><br />
+
+      <label>Merchant ID</label><br />
+      <input name="merchantId" value="<%= body.merchantId %>" required />
+      <br /><br />
+
+      <label>Employee ID</label><br />
+      <input name="employeeId" value="<%= body.employeeId %>" required />
+      <br /><br />
+
+      <label>Method</label><br />
+      <input name="method" value="<%= body.method %>" />
+      <br /><br />
+
+      <input type="hidden" name="type" value="01" />
+      <input type="hidden" name="paymentMethod" value="1" />
+
+      <button type="submit">Send API</button>
+    </form>
+
+    <% if (response !== null) { %>
+    <hr />
+
+    <h3>API Response</h3>
+    <pre><%= JSON.stringify(response, null, 2) %></pre>
+
+    <h3>cURL (Postman Ready)</h3>
+    <pre>
+curl --location --request POST '<%= baseUrl %>' \
+--header 'Content-Type: application/x-www-form-urlencoded' \
+--data-urlencode 'referenceNumber=<%= body.referenceNumber %>' \
+--data-urlencode 'name=<%= body.name %>' \
+--data-urlencode 'emailAddress=<%= body.emailAddress %>' \
+--data-urlencode 'amount=<%= body.amount %>' \
+--data-urlencode 'frequency=<%= body.frequency %>' \
+--data-urlencode 'maximumFrequency=<%= body.maximumFrequency %>' \
+--data-urlencode 'purposeOfPayment=<%= body.purposeOfPayment %>' \
+--data-urlencode 'businessModel=<%= body.businessModel %>' \
+--data-urlencode 'bankId=<%= body.bankId %>' \
+--data-urlencode 'merchantId=<%= body.merchantId %>' \
+--data-urlencode 'employeeId=<%= body.employeeId %>' \
+--data-urlencode 'method=<%= body.method %>' \
+--data-urlencode 'type=01' \
+--data-urlencode 'paymentMethod=1'
+      </pre
+    >
+    <% } %>
+  </body>
+</html>

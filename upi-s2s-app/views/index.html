@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>UPI Payment</title>
+    <script>
+      async function init() {
+        // Correct endpoint
+        const res = await fetch("/api/payment/detect-device");
+        const data = await res.json();
+
+        if (data.device === "android" || data.device === "ios") {
+          window.location.href = "/mobile-intent.html";
+        } else {
+          window.location.href = "/desktop-collect.html";
+        }
+      }
+      window.onload = init;
+    </script>
+  </head>
+  <body>
+    <h2>Checking device...</h2>
+  </body>
+</html>

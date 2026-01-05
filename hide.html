@@ -5,9 +5,9 @@
   <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
   <script>
     var options = {
-      key: "rzp_test_qHO5zWaf7OUAPm", // Enter the Key ID generated from the Dashboard
-      amount: "1527300",
-      currency: "INR",
+      key: "rzp_live_As4JuG1eCtI19k", // Enter the Key ID generated from the Dashboard
+      amount: "6000",
+      currency: "USD",
       prefill: {
         email: "gaurav.kumar@example.com",
         contact: +919900000000,
@@ -40,7 +40,7 @@
       config: {
         display: {
           hide: [
-            { method: "netbanking" },
+            { method: "wallet", wallets: ["paypal"] },
             // { method: "upi" },
             // { method: "card" },
             // { method: "net" },
